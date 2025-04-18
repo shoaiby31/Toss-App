@@ -31,7 +31,8 @@ A modern and interactive coin toss web app with smooth animations and clean desi
 
 ## 📷 Screenshots
 
-![Screenshot 1](./screenshots/coin-toss-ui.png)  
+![Screenshot 1](./screenshots/ss1.png)  
+![Screenshot 2](./screenshots/ss2.png)  
 *(Optional – Add screenshots of the UI if available)*
 
 ---
@@ -43,3 +44,4 @@ To run this app locally:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/your-username/coin-toss-app.git
+Author- Shoaib Yousaf
