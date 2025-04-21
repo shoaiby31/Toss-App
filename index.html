@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Toss Decision App</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+	<link rel="stylesheet" href="my-style.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<style>
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+
+		header {
+			background: #6a1b9a;
+			color: white;
+			padding: 1rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.logo {
+			height: 50px;
+		}
+
+		.menu-icon {
+			cursor: pointer;
+		}
+
+		main {
+			flex: 1;
+			padding: 2rem;
+		}
+
+		.card {
+			border-radius: 1rem;
+			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+		}
+
+		.coin-container {
+			display: flex;
+			justify-content: center;
+			margin: 2rem 0;
+		}
+
+		#coin {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			background-image: url('images/head.png');
+			background-size: cover;
+			cursor: pointer;
+		}
+
+		.heads {
+			animation: flipHeads 3s ease-out forwards;
+		}
+
+		.tails {
+			animation: flipTails 3s ease-out forwards;
+		}
+
+		@keyframes flipHeads {
+			0% {
+				transform: rotateY(0);
+			}
+
+			100% {
+				transform: rotateY(1800deg);
+			}
+		}
+
+		@keyframes flipTails {
+			0% {
+				transform: rotateY(0);
+			}
+
+			100% {
+				transform: rotateY(1980deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<img src="images/logo.png" class="logo" alt="Logo">
+		<h4>The Fair Toss</h4>
+
+	</header>
+
+	<main class="container">
+
+		<div class="row g-4">
+
+			<div class="col-md-6 offset-md-3">
+
+
+
+
+				<div class="card p-4">
+					<h5 class="text-center">Click on the coin to flip</h5>
+					<div class="coin-container">
+						<div id="coin" style="text-align: center;">
+							<div class="side-a"><br><br><br><br><br><span
+									style="font-family: arial; font-size: 14px; font-weight: bold;">Head</span></div>
+							<div class="side-b"><br><br><br><br><br><span
+									style="font-family: arial; font-size: 14px; font-weight: bold;">Tail</span></div>
+						</div>
+
+					</div><br>
+					<form id="form1">
+						<div class="mb-3">
+							<label class="form-label">How Many Participants:</label>
+							<input type="number" class="form-control" id="total-teams" required>
+							<div class="form-text text-danger" id="err"></div>
+						</div>
+						<div class="d-grid">
+							<button type="button" class="btn btn-primary" onclick="MakeTeams()">Submit</button>
+						</div>
+					</form>
+
+
+
+					<form action="" method="POST" name="form2" id="form2">
+						<div id="vvv"></div>
+						<div id="result"></div>
+						<div class="d-grid mt-3">
+							<Button type="button" id="decision-btn" class="btn btn-info" style="display: none;"
+								onclick="TeamsDecision()">
+								Make Decision <span class="badge bg-light text-dark" id="count"></span>
+							</Button>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		document.getElementById('coin').addEventListener('click', function () {
+			let flipResult = Math.random();
+			this.className = '';
+			setTimeout(() => {
+				if (flipResult <= 0.5) {
+					this.classList.add('heads');
+				} else {
+					this.classList.add('tails');
+				}
+			}, 100);
+		});
+
+		function SideNavbar() {
+			alert("Navigation toggle placeholder"); // You can implement actual nav
+		}
+
+		function MakeTeams() {
+			let totalTeams = document.getElementById("total-teams").value;
+			let err = document.getElementById("err");
+			let vvv = document.getElementById("vvv");
+			let result = document.getElementById("result");
+			let decisionBtn = document.getElementById("decision-btn");
+
+			if (totalTeams > 2 && totalTeams <= 50) {
+				err.innerText = "";
+				vvv.innerHTML = "";
+				result.innerHTML = "";
+				result.style.display = "none";
+				decisionBtn.classList.remove("d-none");
+				document.getElementById("count").innerText = "0";
+
+				for (let i = 0; i < totalTeams; i++) {
+					vvv.innerHTML += `
+            <div class='mb-3'>
+              <label>Team Name:</label>
+              <input type='text' class='form-control' value='Team ${i + 1}' id='team${i}' maxlength='15' required>
+            </div>`;
+				}
+			} else {
+				err.innerText = "Please enter a value between 3 and 50.";
+			}
+		}
+
+		function TeamsDecision() {
+			let vvv = document.getElementById("vvv");
+			let result = document.getElementById("result");
+			let inputs = vvv.querySelectorAll("input");
+			let teams = Array.from(inputs).map(input => input.value.trim()).filter(Boolean);
+			if (teams.length > 0) {
+				let selected = teams[Math.floor(Math.random() * teams.length)];
+				result.style.display = "block";
+				result.innerHTML = `<div class='alert alert-success text-center'>Selected Team: <strong>${selected}</strong></div>`;
+				document.getElementById("count").innerText++;
+			}
+		}
+	</script>
+	<script src="js/script.js"></script>
+</body>
+
+</html>
